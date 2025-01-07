@@ -30,7 +30,10 @@ export default function Home() {
                 body: JSON.stringify({ input_value: input }),
             });
 
-            const data = await res.json();
+            const text = await res.text(); // Get the raw response text
+            console.log(text); // Log the response to see what's being returned
+
+            const data = JSON.parse(text); // Manually parse the response
             if (!res.ok) throw new Error(data.message);
             setResponse(data);
         } catch (err: unknown) {
@@ -41,6 +44,7 @@ export default function Home() {
             }
         }
     };
+
 
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">

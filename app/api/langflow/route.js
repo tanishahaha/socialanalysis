@@ -1,9 +1,9 @@
 export async function POST(req) {
-    const body = await req.json();
+    try {
+        const body = await req.json();
 
-    const response = await fetch(
-        process.env.NEXT_PUBLIC_API_URL,
-        {
+        // Send the request to the external API
+        const response = await fetch(process.env.NEXT_PUBLIC_API_URL, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -25,16 +25,32 @@ export async function POST(req) {
                     "AstraDB-B3ceS": {},
                 },
             }),
-        }
-    );
-
-    if (!response.ok) {
-        const error = await response.json();
-        return new Response(JSON.stringify({ message: error.message }), {
-            status: response.status,
         });
-    }
 
-    const data = await response.json();
-    return new Response(JSON.stringify(data), { status: 200 });
+        // If the response is not OK, throw an error
+        if (!response.ok) {
+            const error = await response.text(); // Get raw response text
+            try {
+                const parsedError = JSON.parse(error); // Try to parse as JSON
+                return new Response(JSON.stringify({ message: parsedError.message }), {
+                    status: response.status,
+                });
+            } catch (e) {
+                return new Response(
+                    JSON.stringify({ message: "An error occurred: " + error }),
+                    { status: response.status }
+                );
+            }
+        }
+
+        // Parse the response as JSON
+        const data = await response.json();
+        return new Response(JSON.stringify(data), { status: 200 });
+    } catch (err) {
+        console.error("Error in POST handler:", err); // Log the error for debugging
+        return new Response(
+            JSON.stringify({ message: "Internal server error. Please try again later." }),
+            { status: 500 }
+        );
+    }
 }
