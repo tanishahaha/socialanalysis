@@ -1,13 +1,26 @@
 "use client"
 import { useState } from "react";
 
+interface ResponseData {
+    outputs: {
+        outputs: {
+            results: {
+                message: {
+                    text: string;
+                };
+            };
+        }[];
+    }[];
+}
+
 export default function Home() {
     const [input, setInput] = useState("");
-    const [response, setResponse] = useState(null);
-    const [error, setError] = useState("");
+    const [response, setResponse] = useState<ResponseData | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError(null);
         setResponse(null);
 
         try {
@@ -21,9 +34,8 @@ export default function Home() {
             if (!res.ok) throw new Error(data.message);
             setResponse(data);
         } catch (err: unknown) {
-            // Check if the error is an instance of Error
             if (err instanceof Error) {
-                setError("Error");
+                setError(err.message);
             } else {
                 setError("An unknown error occurred.");
             }
