@@ -37,7 +37,7 @@ export async function POST(req) {
                 });
             } catch (e) {
                 return new Response(
-                    JSON.stringify({ message: "An error occurred: " + error }),
+                    JSON.stringify({ message: "An error occurred: " + error + e }),
                     { status: response.status }
                 );
             }
