@@ -7,7 +7,7 @@ export default function Home() {
     const [response, setResponse] = useState(null);
     const [error, setError] = useState(null);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
         setError(null);
         setResponse(null);
@@ -51,7 +51,7 @@ export default function Home() {
             </form>
 
             {response && (
-                <div className="mt-4 p-4 bg-green-100 text-green-800 rounded w-full max-w-2xl">
+                <div className="mt-4 p-4 bg-green-100 text-green-800 rounded w-full md:max-w-2xl">
                     <h2 className="font-bold mb-2">Output:</h2>
                     <p>{response.outputs[0].outputs[0].results.message.text}</p>
                 </div>
