@@ -4,11 +4,10 @@ import { useState } from "react";
 export default function Home() {
     const [input, setInput] = useState("");
     const [response, setResponse] = useState(null);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState("");
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError(null);
         setResponse(null);
 
         try {
@@ -21,8 +20,13 @@ export default function Home() {
             const data = await res.json();
             if (!res.ok) throw new Error(data.message);
             setResponse(data);
-        } catch (err) {
-            setError(err.message);
+        } catch (err: unknown) {
+            // Check if the error is an instance of Error
+            if (err instanceof Error) {
+                setError("Error");
+            } else {
+                setError("An unknown error occurred.");
+            }
         }
     };
 
