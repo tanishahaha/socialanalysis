@@ -1,4 +1,3 @@
-
 "use client"
 import { useState } from "react";
 
@@ -7,7 +6,7 @@ export default function Home() {
     const [response, setResponse] = useState(null);
     const [error, setError] = useState(null);
 
-    const handleSubmit = async (e: any) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
         setResponse(null);
